@@ -72,7 +72,7 @@ def get_random_image():
 
         if not results:
             return None, f"Unable to search for query {params['q']}"
-        elif not results["images_results"]:
+        elif "images_results" not in results:
             return None, f"No images found for query {params['q']}"
 
         _search_cache[cache_key] = {
@@ -119,8 +119,8 @@ def get_image_from_query(query_string):
 
         if not results:
             return None, f"Unable to search for query {query_string}"
-        elif not results["images_results"]:
-            return None, f"No images found for query {query_string}"
+        elif "images_results" not in results:
+            return None, f"No images found for query {query_string}, results gave {results}"
 
         print(f"Searched with query string {params['q']}, got image with url {results['images_results'][0]['original']}")
 
