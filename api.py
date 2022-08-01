@@ -11,12 +11,16 @@ _ACCOUNT_API_BASE_URL = "https://serpapi.com/account?api_key={key}"
 _safe_search = "active"
 
 def set_safe_search(flag):
+    global _safe_search
     _safe_search = "active" if flag else "off"
+    print(f"Safe search now set to {_safe_search}")
 
 def safe_search():
+    global _safe_search
     return _safe_search == "active"
 
 def get_random_image():
+    global _safe_search
     params = {
         "q": choice(search_tokens()) + " " + str(randint(1, 99999)),
         "tbm": "isch",
@@ -24,6 +28,8 @@ def get_random_image():
         "api_key": serp_key(),
         "safe": _safe_search
     }
+
+    print(f"Searching for {params['q']} with safe search {params['safe']}")
 
     search = GoogleSearch(params)
     results = search.get_dict()
@@ -36,6 +42,7 @@ def get_random_image():
     return results["images_results"][0], ""
 
 def get_image_from_query(query_string):
+    global _safe_search
     params = {
         "q": query_string + " " + str(randint(1, 99999)),
         "tbm": "isch",
@@ -46,6 +53,8 @@ def get_image_from_query(query_string):
 
     search = GoogleSearch(params)
     results = search.get_dict()
+
+    print(f"Searching for {params['q']} with safe search {params['safe']}")
 
     if not results:
         return None, f"Unable to search for query {query_string}"
