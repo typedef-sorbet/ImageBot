@@ -1,5 +1,5 @@
 import discord
-import api
+import diy as api
 import config
 
 from discord.ext import tasks, commands
@@ -79,21 +79,6 @@ class ImageClient(discord.Client):
                     await channel.send(reason)
                 else:
                     await self.send_img_to_channel(img["original"], channel, img["title"])
-
-            case ["!remaining"]:
-                await channel.send(f"You have {api.num_requests_remaining()} searches remaining.")
-
-            case ["!safesearch", *args]:
-                if not args:
-                    await channel.send(f"Safe search is {'enabled' if api.safe_search() else 'disabled'}.")
-                elif args[0] in ["yes", "enable", "on", "true"]:
-                    api.set_safe_search(True)
-                    await channel.send(f"Safe search is {'enabled' if api.safe_search() else 'disabled'}.")
-                elif args[0] in ["no", "disable", "off", "false"]:
-                    api.set_safe_search(False)
-                    await channel.send(f"Safe search is {'enabled' if api.safe_search() else 'disabled'}.")
-                else:
-                    await channel.send(f"Invalid argument to command !safesearch: {' '.join(args)}")
 
             case ["!commands"] | ["!help"]:
                 await channel.send("Commands: !imagesearch <query>, !remaining, !safesearch [on/off], !commands, !help")
