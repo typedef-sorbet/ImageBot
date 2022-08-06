@@ -78,7 +78,7 @@ class ImageClient(discord.Client):
                 if not img:
                     await channel.send(reason)
                 else:
-                    await self.send_img_to_channel(img["original"], channel, img["title"])
+                    await self.send_img_to_channel(img)
 
             case ["!commands"] | ["!help"]:
                 await channel.send("Commands: !imagesearch <query>, !remaining, !safesearch [on/off], !commands, !help")
