@@ -1,0 +1,3 @@
+[submodule "scraperlib"]
+	path = scraperlib
+	url = git@github.com:ohyicong/Google-Image-Scraper
