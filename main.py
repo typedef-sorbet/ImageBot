@@ -33,7 +33,7 @@ class DailyImageCog(commands.Cog):
                 return
 
             try:
-                await self.client.send_img_to_channel(new_img["original"], channel, new_img["title"])
+                await self.client.send_img_to_channel(new_img, channel)
             except discord.HTTPException as httpErr:
                 print(f"Failed to send message: {httpErr}")
             except discord.Forbidden as forbiddenErr:
@@ -46,12 +46,10 @@ class ImageClient(discord.Client):
         self.active = False
         super().__init__()
 
-    async def send_img_to_channel(self, url, channel, title = ""):
+    async def send_img_to_channel(self, url, channel):
         print(f"Sending image with url {url}")
 
-        embed = discord.Embed(
-            description = title if title else None
-        )
+        embed = discord.Embed()
         embed.set_image(url=url)
 
         await channel.send(embed=embed)
@@ -78,10 +76,10 @@ class ImageClient(discord.Client):
                 if not img:
                     await channel.send(reason)
                 else:
-                    await self.send_img_to_channel(img)
+                    await self.send_img_to_channel(img, channel)
 
             case ["!commands"] | ["!help"]:
-                await channel.send("Commands: !imagesearch <query>, !remaining, !safesearch [on/off], !commands, !help")
+                await channel.send("Commands: !imagesearch <query>, !commands, !help")
 
             case _:
                 print("No command found in message.")

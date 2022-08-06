@@ -23,7 +23,7 @@ def get_random_image():
     try:
         return Scraper(
             webdriver_path, image_path, search_token, 1, True
-        ).find_image_urls(), ""
+        ).find_image_urls()[0], ""
     except Exception:
         return None, str(traceback.format_exc())
 
@@ -37,7 +37,7 @@ def get_image_from_query(query_string):
     try:
         return Scraper(
             webdriver_path, image_path, search_token, 1, True
-        ).find_image_urls(), ""
+        ).find_image_urls()[0], ""
     except Exception:
         return None, str(traceback.format_exc())
 
