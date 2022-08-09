@@ -18,7 +18,7 @@ def get_random_image():
     global webdriver_path
     global image_path
     # Shouldn't need caching, since we're not exercising an API that I'm rate-limited on
-    search_token = f"{choice(search_tokens())} {randint(1, 99999)}"
+    search_token = f"{choice(search_tokens())}"
 
     try:
         return Scraper(
@@ -31,13 +31,12 @@ def get_image_from_query(query_string):
     global webdriver_path
     global image_path
 
-    # Shouldn't need caching, since we're not exercising an API that I'm rate-limited on
-    search_token = f"{query_string} {randint(1, 99999)}"
-
     try:
         return Scraper(
-            webdriver_path, image_path, search_token, 1, True
+            webdriver_path, image_path, query_string, 1, True
         ).find_image_urls()[0], ""
+    except IndexError:
+        return None, f"Couldn't find any images for {' '.join(query_string.split('+'))}"
     except Exception:
         return None, str(traceback.format_exc())
 

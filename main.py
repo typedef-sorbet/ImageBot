@@ -1,5 +1,6 @@
 import discord
 import diy as api
+import db
 import config
 
 from discord.ext import tasks, commands
@@ -71,15 +72,44 @@ class ImageClient(discord.Client):
         # Check to see if it's a command
         match message.content.split(" "):
             case ["!imagesearch", *query]:
-                img, reason = api.get_image_from_query(" ".join(query))
+                img, reason = api.get_image_from_query("+".join(query))
+
+                db.log_search(
+                    message.author.name, 
+                    message.author.id,
+                    " ".join(query),
+                    img if img else ""
+                )
 
                 if not img:
                     await channel.send(reason)
                 else:
                     await self.send_img_to_channel(img, channel)
 
+            case ["!leaderboard", *user]:
+                # TODO error checking, this sucks rn
+                if " ".join(user) in ["server", "global", "all"]:
+                    results = db.get_server_most_used_terms()
+                    user = ["This server"]
+                else:
+                    results = db.get_user_most_used_terms(" ".join(user))
+
+                if results:
+                    message = ""
+
+                    message += f"{' '.join(user)} has the following top 5 searches:\n"
+
+                    for idx, row in enumerate(results):
+                        message += f"* {row['count']} searches containing \"{row['search_term']}\"\n"
+                        if idx >= 4:
+                            break
+
+                    await channel.send(message)
+                else:
+                    await channel.send(f"Either user {' '.join(user)} has not searched anything yet, or no such user exists.")
+
             case ["!commands"] | ["!help"]:
-                await channel.send("Commands: !imagesearch <query>, !commands, !help")
+                await channel.send("Commands: !imagesearch <query>, !leaderboard <username> !commands, !help")
 
             case _:
                 print("No command found in message.")
