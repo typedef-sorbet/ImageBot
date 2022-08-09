@@ -106,7 +106,7 @@ def get_user_most_used_terms(user_name):
 
     # Yes, this is incredibly inefficient. Too bad!
     for query in rows:
-        split_query = query[0].split()
+        split_query = query[0].lower().split()
         # God, I love Python.
         subqueries = [
             split_query[start:end]
@@ -145,7 +145,7 @@ def get_server_most_used_terms():
 
     # Yes, this is incredibly inefficient. Too bad!
     for query in rows:
-        split_query = query[0].split()
+        split_query = query[0].lower().split()
         # God, I love Python.
         subqueries = [
             split_query[start:end]
